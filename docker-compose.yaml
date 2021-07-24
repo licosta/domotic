@@ -1,0 +1,23 @@
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/raspberrypi4-homeassistant:stable"
+    volumes:
+      - ./home-assistant:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+  mqtt:
+    container_name: mosquitto
+    image: eclipse-mosquitto:latest
+    ports:
+      - 1883:1883
+      - 8883:8883
+      - 9001:9001
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/logs:/mosquitto/logs
+#      - ./etc/resolv.conf:/etc/resolv.conf
+    restart: unless-stopped
