@@ -21,3 +21,21 @@ services:
       - ./mosquitto/logs:/mosquitto/logs
 #      - ./etc/resolv.conf:/etc/resolv.conf
     restart: unless-stopped
+zigbee2mqtt:
+    container_name: zigbee2mqtt
+    depends_on:
+      - mosquitto
+    image: koenkk/zigbee2mqtt
+    volumes:
+      - ./data-zigbee2mqtt:/app/data
+      - /run/udev:/run/udev:ro
+    devices:
+      - /dev/ttyUSB0:/dev/ttyUSB0
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+    restart: always
+    privileged: true
+    environment:
+      - TZ=Europe/Madrid
